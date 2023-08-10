@@ -40,3 +40,5 @@ sensors:
 examples:
     - atim:generic:1:
         - "Example Trame de vie"
+        - "Example Leak Detection: Alert frame 1"
+        - "Example Leak Detection: Alert frame 2"
