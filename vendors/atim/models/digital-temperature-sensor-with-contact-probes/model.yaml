@@ -1,17 +1,12 @@
 # Commercial name of the model 
-name: ACW-THX-I
+name: ACW-TMxD
 # Functional description of the product. Maximum 500 characters. 
-description: "The TH-I facilitates the monitoring of comfort and energy efficiency indicators in your rooms and buildings thanks to its temperature and humidity sensors."
+description: "The TMxD can monitor one to two remote temperature sensors -55°C | +125°C. It is commonly deployed in buildings, energy installations and cold chain control."
 # Logo of the device
-logo: atim_th-i.png
-# Product name & Version
-product:
-    name: ATIM/THI
-    version: 1
+logo: atim_tmxd.png
 # ID(s) of the profile that defines the LoRaWAN characteristics of this model.
-deviceProfileId: 
-    - ATIM/THIA.1.0.2b_ETSI
- 
+deviceProfileId:
+    - atim_RFGroup1_1.0.2b_classA
 # You may optionally customize any of the following settings to override the generic value set in LoRaWAN device profiles associated with your model. Leave empty if you want to keep the Device Profile settings. 
 # Maximum device TX Conducted output power in dBm. 
 maxTxPower:
@@ -26,15 +21,15 @@ minTxEIRP:
 motionIndicator:
  
 # Is your device certified by the LoRa Alliance? Possible values: true, false. 
-LoRaWANCertified: 
+LoRaWANCertified: false
 # Always mandatory: `<vendorId>:<modelName>:<modelVersion>` (You should have only one per model)
 # Format: `<8 characters max>:<16 characters max>:<digits only>`
-modelId: atim:indoor-temp-humi:1
+modelId: atim:tmxd:1
 # <vendorId>:<protocolName>:<protocolVersion> Needed for linking the model with a specific driver -> must be the same one used in driver.yaml in the corresponding model (You might have several ones)
 protocolId: atim:generic:1
 # DataSheet URL (optional) 
-specificationURL: 
+specificationURL: https://www.atim.com/wp-content/uploads/documentation/ACW/ACW-TMxD/ENGLISH/ATIM_ACW-TMx_DS_EN.pdf
 # User Guide URL (optional) 
-userGuideURL: 
+userGuideURL: https://www.atim.com/wp-content/uploads/documentation/ACW/ACW-TMxD/ENGLISH/ATIM_ACW-TM1D_UG_EN.pdf
 # <sensor>:<unitId> Available sensors following Actility ontology: https://github.com/actility/device-catalog/blob/main/template/sample-vendor/drivers/ONTOLOGY.md
 sensors:
