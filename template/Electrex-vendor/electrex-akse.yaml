@@ -1,0 +1,19 @@
+# ID of the vendor to be used as an internal reference for Actility vendors.
+# Define your own ID following this rule: Maximum of 8 characters in lowercase.
+# Be careful: Once you chose a vendor ID, it cannot be changed later
+id: electrex
+# Official/commercial name of the vendor to be used as a label.
+name: Electrex AKSE
+# Simple description of the vendor. Maximum 500 characters. Special characters are not allowed ('\n', '\t', '\r', ect...).
+description: Electrex designs, produces and commercializes *in Italy and abroad, instruments and software for energy measurement, energy saving, energy consumption and energy production management. The Electrex solutions are used in the energy efficiency and energy autonmation applications for the industrial, tertiary, residential, public buildings and renewable energy sectors. 
+
+# LoRa-Alliance Vendor ID used for QR code https://lora-alliance.org/wp-content/uploads/2020/10/LoRa_Alliance_Vendor_ID_for_QR_Code_02142022.pdf. It consists of 4 upper-case hexadecimal characters.
+loRaAllianceVendorID: '000E'
+# Logo file name if different from <vendorId>.png (optional).
+logo:
+# URL to the company website.
+websiteURL: https://www.electrex.it/en/
+# URL to the company marketplace.
+marketplaceURL: https://www.electrex.it/en/products/products-products/products.html
+# Priority for an email or a phone number, otherwise an address.
+contact: skender.musaj@akse.it
