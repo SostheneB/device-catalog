@@ -20,7 +20,6 @@ function decodeUplink(input) {
         warnings: []
     };
     const raw = Buffer.from(input.bytes);
-    const rawHEX = Buffer.from(input.bytes.toString(16)); //we need to keep an hexa value for some names
 
     if (raw.byteLength > 30) { // 30 is the max number of bytes in a payload
         result.errors.push("Invalid uplink payload: length exceeds 30 bytes");
@@ -28,32 +27,34 @@ function decodeUplink(input) {
         return result;
     }
 
-    switch (rawHEX[0]) {
+    switch (raw[0]) {
         case 0x11:
             result.data.frame_type = "Status frame";
-            if (rawHEX.byteLength < 28 ) {
-                result.errors.push("Invalid uplink payload: index out of bounds when reading Device ID");
+            if (raw.byteLength < 13 ) {
+                result.errors.push("Invalid uplink payload: index out of bounds when reading status frame");
                 delete result.data;
                 return result;
             } else {
                 let i = 1;
-                result.data.device_id = `${rawHEX[i]}${rawHEX[i + 1]}${rawHEX[i + 2]}${rawHEX[i + 3]}`;
+                result.data.device_id = '00'+raw[i].toString(16)+raw[i+1].toString(16)+raw[i+2].toString(16)+raw[i+3].toString(16);
                 i += 4;
-                result.data.port = `${rawHEX[i]}`;
+                result.data.port = raw[i];
                 i += 1;
                 result.data.device_date_time = raw[i]*256**3 + raw[i + 1]*256**2 + raw[i + 2]*256 + raw[i + 3];
                 i += 4;
-                result.data.firmware = `${rawHEX[i]}${rawHEX[i + 1]}${rawHEX[i + 2]}`;
+                result.data.firmware = raw[i].toString(16)+'.'+raw[i+1].toString(16)+'.'+raw[i+2].toString(16);
                 i += 3;
-                for (j = i; j < rawHEX.byteLength; j ++) {
-                    result.data.name = `${result.data.name}${rawHEX[j]}`;
+                let name = raw[i].toString(16);
+                for (j = i+1; j < raw.byteLength; j ++) {
+                    name = name+raw[j].toString(16);
                 }
+                result.data.name = name;
                 return result;
             }
         case 0x01:
             result.data.frame_type = "Data frame";
-            if (rawHEX.byteLength < 14 ) {
-                result.errors.push("Invalid uplink payload: index out of bounds when reading Fram parameters");
+            if (raw.byteLength < 14 ) {
+                result.errors.push("Invalid uplink payload: index out of bounds when reading data frame");
                 delete result.data;
                 return result;
             } else {
@@ -72,19 +73,22 @@ function decodeUplink(input) {
                 i += 2;
                 result.data.data_bytes = raw[i];
                 i += 1;
-                switch (rawHEX[7]) {
+                switch (raw[7]) {
                     case 0x0a:
                         result.data.c1 = raw[i]*256**3 + raw[i + 1]*256**2 + raw[i + 2]*256 + raw[i + 3];
+                        result.data.frame_type = "Data frame - GAS METER";
                         return result;
                     case 0x0b:
                         result.data.c1 = raw[i]*256**3 + raw[i + 1]*256**2 + raw[i + 2]*256 + raw[i + 3];
                         i += 4;
                         result.data.c2 = raw[i]*256**3 + raw[i + 1]*256**2 + raw[i + 2]*256 + raw[i + 3];
+                        result.data.frame_type = "Data frame - WATER METER";
                         return result;
                     case 0x0c:
                         result.data.ea = raw[i]*256**3 + raw[i + 1]*256**2 + raw[i + 2]*256 + raw[i + 3];
                         i += 4;
                         result.data.er = raw[i]*256**3 + raw[i + 1]*256**2 + raw[i + 2]*256 + raw[i + 3];
+                        result.data.frame_type = "Data frame - ENERGY METER";
                         return result;
                     case 0xf7:
                         result.data.ea_imp = raw[i]*256**3 + raw[i + 1]*256**2 + raw[i + 2]*256 + raw[i + 3];
@@ -94,16 +98,16 @@ function decodeUplink(input) {
                         result.data.er_cap_imp = raw[i]*256**3 + raw[i + 1]*256**2 + raw[i + 2]*256 + raw[i + 3];
                         i += 4;
                         result.data.es_imp = raw[i]*256**3 + raw[i + 1]*256**2 + raw[i + 2]*256 + raw[i + 3];
+                        result.data.frame_type = "Data frame - IMPORTED ENERGY";
                         return result;
                     default:
-                    result.errors.push("Invalid uplink payload: unknown id '" + raw[i] + "'");
+                    result.errors.push("Invalid uplink payload: unknown data frame type");
                     delete result.data;
                     return result;
                 }
             }
         default:
-            result.errors.push("Invalid uplink payload: unknown id '" + raw[i] + "'");
-            delete result.data;
+            result.errors.push("Invalid uplink payload: unknown frame type");
             return result;
     }
 }
