@@ -30,7 +30,7 @@ function decodeUplink(input) {
 
     switch (rawHEX[0]) {
         case 0x11:
-            result.data.frame = "Status frame";
+            result.data.frame_type = "Status frame";
             if (rawHEX.byteLength < 28 ) {
                 result.errors.push("Invalid uplink payload: index out of bounds when reading Device ID");
                 delete result.data;
@@ -51,7 +51,7 @@ function decodeUplink(input) {
                 return result;
             }
         case 0x01:
-            result.data.frame = "Data frame";
+            result.data.frame_type = "Data frame";
             if (rawHEX.byteLength < 14 ) {
                 result.errors.push("Invalid uplink payload: index out of bounds when reading Fram parameters");
                 delete result.data;
