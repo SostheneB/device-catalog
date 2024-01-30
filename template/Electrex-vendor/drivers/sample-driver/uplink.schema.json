@@ -54,6 +54,18 @@
       },
       "$c2": {
         "type": "integer"
+      },
+      "$ea_imp": {
+        "type": "integer"
+      },
+      "$er_ind_imp": {
+        "type": "integer"
+      },
+      "$er_cap_imp": {
+        "type": "integer"
+      },
+      "$es_imp": {
+        "type": "integer"
       }
     },
     "additionalProperties": false
