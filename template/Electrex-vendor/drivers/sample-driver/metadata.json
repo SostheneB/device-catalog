@@ -1,16 +1,16 @@
 {
-  "name": "sample-model-driver",
+  "name": "libra-driver",
   "version": "1.0.0",
   "main": "index.js",
-  "description": "Sample model driver",
+  "description": "Libra driver",
   "codecId": "0001",
-  "sourceUrl": "https://github.com/actility/device-catalog/tree/main/template/sample-vendor/drivers/sample-driver",
-  "vendorId": "000E",
+  "sourceUrl": "https://github.com/actility/device-catalog/tree/main/template/Electrex-vendor/drivers/sample-driver",
+  "vendorId": "",
   "specVersion": "1.0.0",
   "codec": {
-    "encodeDownlink": true,
-    "decodeDownlink": true,
-    "examples": true,
+    "encodeDownlink": false,
+    "decodeDownlink": false,
+    "examples": false,
     "jsonSchemas": true
   }
 }

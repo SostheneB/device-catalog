@@ -20,13 +20,71 @@ function decodeUplink(input) {
         warnings: []
     };
     const raw = Buffer.from(input.bytes);
+    const rawHEX = Buffer.from(input.bytes.toString(16)); //we need to keep an hexa value for some names
 
-    if (raw.byteLength > 8) {
-        result.errors.push("Invalid uplink payload: length exceeds 8 bytes");
+    if (raw.byteLength > 30) { // 30 is the max number of bytes in a payload
+        result.errors.push("Invalid uplink payload: length exceeds 30 bytes");
         delete result.data;
         return result;
     }
 
+    if (raw[0] = 17) { // 17 is the value of 0x11 in base 10
+        result.data.frame = "Status frame"
+        for (i = 1; i < raw.byteLength; i++) {
+            switch (raw[i]) {
+                // Device ID - 4 bytes
+                case 0x00:
+                    if (raw.byteLength < i + 4) {
+                        result.errors.push("Invalid uplink payload: index out of bounds when reading Device ID");
+                        delete result.data;
+                        return result;
+                    }
+                    result.data.device_id = `${rawHEX[i]}${rawHEX[i + 1]}${rawHEX[i + 2]}${rawHEX[i + 3]}`;
+                    i += 4;
+                    break;
+                // Target Port - 1 bytes
+                case 0x01:
+                    if (raw.byteLength < i + 1) {
+                        result.errors.push("Invalid uplink payload: index out of bounds when reading Target Port");
+                        delete result.data;
+                        return result;
+                    }
+                    result.data.port = `${rawHEX[i]}`;
+                    i += 1;
+                    break;
+                // Device Date Time - 4 bytes
+                case 0x02:
+                    if (raw.byteLength < i + 4) {
+                        result.errors.push("Invalid uplink payload: index out of bounds when reading Device Date Time");
+                        delete result.data;
+                        return result;
+                    }
+                    result.data.device_date_time = raw[i]*256**3 + raw[i + 1]*256**2 + raw[i + 2]*256 + raw[i + 3];
+                    i += 4;
+                    break;
+                    // Firmware Version - 3 bytes
+                case 0x03:
+                    if (raw.byteLength < i + 3) {
+                        result.errors.push("Invalid uplink payload: index out of bounds when reading Firmware Version");
+                        delete result.data;
+                        return result;
+                    }
+                    result.data.firmware = `${rawHEX[i]}${rawHEX[i + 1]}${rawHEX[i + 2]}`;
+                    i += 3;
+                    break;
+                case 0x04:
+                    for (j = i; j < raw.byteLength; j ++) {
+                        result.data.name = `${result.data.name}${rawHEX[j]}`;
+                    }
+                    return result;
+                default:
+                    result.errors.push("Invalid uplink payload: unknown id '" + raw[i] + "'");
+                    delete result.data;
+                    return result;
+            }
+
+        }
+    }
     for (i = 0; i < raw.byteLength; i++) {
         switch (raw[i]) {
             // Temperature - 2 bytes
